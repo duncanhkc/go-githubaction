@@ -1,4 +1,4 @@
-name: Like pizza
+name: on-comment-created
 
 on:
   issue_comment:
@@ -6,17 +6,10 @@ on:
       - created
 
 jobs:
-  like-pizza:
+  dump:
     runs-on: ubuntu-latest
     steps:
-      - name: Like pizza
-        uses: actions/github-script@v4
-        with:
-          script: |
-            const {owner, repo} = context.issue
-            github.reactions.createForIssueComment({
-              owner,
-              repo,
-              comment_id: context.payload.comment.id,
-              content: "+1",
-            });
+      - name: $github
+        run: echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
