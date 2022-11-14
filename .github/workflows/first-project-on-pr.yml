@@ -1,4 +1,4 @@
-name: first-project
+name: first-project-on-pr
 
 # Controls when the workflow will run
 on:

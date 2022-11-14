@@ -1,0 +1,34 @@
+name: first-project-on-push
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'first-project/**'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build-and-push-images:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [ first-app, second-app ]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_TOKEN}}
+
+      - name: Build the docker image
+        working-directory: ./first-project
+        run: docker build -t ${{secrets.DOCKERHUB_USERNAME}}/${{matrix.app}}:prod-${GITHUB_SHA:7} -f cmd/${{matrix.app}}/Dockerfile .
+
+      - name: Push the image
+        working-directory: ./first-project
+        run: docker push ${{secrets.DOCKERHUB_USERNAME}}/${{matrix.app}}:prod-${GITHUB_SHA:7}
