@@ -9,7 +9,7 @@ jobs:
   read-comment:
     runs-on: ubuntu-latest
     outputs:
-      comment-json-obj: ${{ fromjson(steps.read-yq.outputs.comment-in-json) }}
+      comment-in-json: ${{ steps.read-yq.outputs.comment-in-json }}
     steps:
       - name: $github
         run: echo "$GITHUB_CONTEXT"
@@ -24,5 +24,4 @@ jobs:
     runs-on: ubuntu-latest
     needs: read-comment
     steps:
-      - run: echo ${{ needs.job1.outputs.comment-json-obj }}
-
+      - run: echo ${{ needs.read-comment.outputs.comment-in-json }}
