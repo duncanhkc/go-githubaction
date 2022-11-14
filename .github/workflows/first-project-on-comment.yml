@@ -1,4 +1,4 @@
-name: Like pizza
+name: on-comment-created
 
 on:
   issue_comment:
@@ -6,8 +6,10 @@ on:
       - created
 
 jobs:
-  like-pizza:
+  dump:
     runs-on: ubuntu-latest
     steps:
-      - name: Like pizza
-        run: echo comment created at ${date}
+      - name: $github
+        run: echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
