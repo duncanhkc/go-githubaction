@@ -3,8 +3,8 @@ name: first-project-on-comment
 on:
   issue_comment:
     types: [created]
-    paths:
-      - 'first-project/**'
+#    paths:
+#      - 'first-project/**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -14,7 +14,6 @@ jobs:
   pr-commented:
     # This job only runs for pull request comments
     name: PR comment
-    if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
       - name: $github
