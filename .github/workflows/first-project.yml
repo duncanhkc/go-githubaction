@@ -33,6 +33,9 @@ jobs:
         app: [ first-app, second-app ]
     steps:
       - name: Build the docker image
+        run: ls -al
+
+      - name: Build the docker image
         working-directory: ./first-project
         run: docker build -t ${{secrets.DOCKERHUB_USERNAME}}/${{matrix.app}}:staging-${GITHUB_SHA:7} -f cmd/${{matrix.app}}/Dockerfile .
 
