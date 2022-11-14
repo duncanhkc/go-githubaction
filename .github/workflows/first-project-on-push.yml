@@ -1,8 +1,7 @@
-name: first-project
+name: first-project-on-push
 
-# Controls when the workflow will run
 on:
-  pull_request:
+  push:
     branches: [ "main" ]
     paths:
       - 'first-project/**'
@@ -12,9 +11,11 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build-app:
+  build-and-push-images:
     runs-on: ubuntu-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    strategy:
+      matrix:
+        app: [ first-app, second-app ]
     steps:
       - uses: actions/checkout@v3
 
@@ -26,8 +27,8 @@ jobs:
 
       - name: Build the docker image
         working-directory: ./first-project
-        run: docker build -t ${{secrets.DOCKERHUB_USERNAME}}/first-app:staging-${GITHUB_SHA:7} -f cmd/first-app/Dockerfile .
+        run: docker build -t ${{secrets.DOCKERHUB_USERNAME}}/${{matrix.app}}:prod-${GITHUB_SHA:7} -f cmd/${{matrix.app}}/Dockerfile .
 
       - name: Push the image
         working-directory: ./first-project
-        run: docker push ${{secrets.DOCKERHUB_USERNAME}}/first-app:staging-${GITHUB_SHA:7}
+        run: docker push ${{secrets.DOCKERHUB_USERNAME}}/${{matrix.app}}:prod-${GITHUB_SHA:7}
