@@ -30,6 +30,7 @@ jobs:
 
           image_names="${image_names%?}]"
 
+          echo $image_names
           echo "image_names=$image_names" >> $GITHUB_OUTPUT
 
   build-and-push-images:
