@@ -12,31 +12,31 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-#  get-image-names:
-#    runs-on: ubuntu-latest
-#    outputs:
-#      image_names: ${{ steps.get-image-names.outputs.image_names }}
-#    steps:
-#      - uses: actions/checkout@v3
-#
-#      - name: get image names
-#        id: get-image-names
-#        working-directory: ./example-go-project/build/dockerfile
-#        run: |
-#          image_names='[ '
-#          for image_name in Dockerfile.*; do
-#            image_names+="${image_name##*.}, "
-#          done
-#          image_names="${image_names%??} ]"
-#          echo $image_names
-#          echo "image_names=$image_names" >> $GITHUB_OUTPUT
+  get-image-names:
+    runs-on: ubuntu-latest
+    outputs:
+      image_names: ${{ steps.get-image-names.outputs.image_names }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: get image names
+        id: get-image-names
+        working-directory: ./example-go-project/build/dockerfile
+        run: |
+          image_names='[ '
+          for image_name in Dockerfile.*; do
+            image_names+="${image_name##*.}, "
+          done
+          image_names="${image_names%??} ]"
+          echo $image_names
+          echo "image_names=$image_names" >> $GITHUB_OUTPUT
 
   build-and-push-images:
     runs-on: ubuntu-latest
-#    needs: get-image-names
+    needs: get-image-names
     strategy:
       matrix:
-        image: [ image1, image2 ]
+        image: ${{ fromJson(needs.get-image-names.outputs.image_names) }}
     steps:
       - uses: actions/checkout@v3
 
