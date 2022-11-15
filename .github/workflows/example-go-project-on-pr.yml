@@ -10,17 +10,30 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  job1:
+  get-image-names:
     runs-on: ubuntu-latest
-    # Map a step output to a job output
     outputs:
-      output1: ${{ steps.step1.outputs.test }}
+      image_names: ${{ steps.get-image-names.outputs.image_names }}
     steps:
-      - id: step1
-        run: echo "test=hello" >> $GITHUB_OUTPUT
-  job2:
+      - uses: actions/checkout@v3
+
+      - name: get image names
+        id: get-image-names
+        working-directory: ./example-go-project/build/dockerfile
+        run: |
+          image_names='[ '
+          for image_name in Dockerfile.*; do
+            image_names+="${image_name##*.}, "
+          done
+          image_names="${image_names%??} ]"
+          echo $image_names
+          echo "image_names=$image_names" >> $GITHUB_OUTPUT
+
+  echo-previous-output:
     runs-on: ubuntu-latest
-    needs: job1
+    needs: get-image-names
     steps:
-      - run: echo ${{needs.job1.outputs.output1}}
+      - name: echo job output
+        run: echo ${{ needs.get-image-names.outputs.image_names }}
