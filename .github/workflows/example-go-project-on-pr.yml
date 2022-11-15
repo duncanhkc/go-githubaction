@@ -31,9 +31,8 @@ jobs:
           echo $image_names
           echo "image_names=$image_names" >> $GITHUB_OUTPUT
 
-  test:
+  echo-previous-output:
     runs-on: ubuntu-latest
-    strategy:
     steps:
       - name: echo job output
         run: echo ${{ needs.get-image-names.outputs.image_names }}
