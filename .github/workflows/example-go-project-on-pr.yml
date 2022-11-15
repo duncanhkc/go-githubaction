@@ -19,7 +19,6 @@ jobs:
     steps:
       - name: get image names
         id: get-image-names
-        working-directory: ./example-go-project/build/dockerfile
         run: |
           echo "image_names=abc" >> $GITHUB_OUTPUT
 
