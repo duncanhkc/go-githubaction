@@ -15,12 +15,12 @@ jobs:
   set-up-image-matrix:
     runs-on: ubuntu-latest
     outputs:
-      image_matrix: ${{ steps.get-image-names.outputs.image_matrix }}
+      image_matrix: ${{ steps.get-image-matrix.outputs.image_matrix }}
     steps:
       - uses: actions/checkout@v3
 
-      - name: get image names
-        id: get-image-names
+      - name: set up image matrix
+        id: get-image-matrix
         working-directory: ./example-go-project/build/dockerfile
         run: |
           image_matrix='[ '
