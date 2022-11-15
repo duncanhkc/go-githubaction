@@ -12,10 +12,10 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  get-image-names:
+  set-up-image-matrix:
     runs-on: ubuntu-latest
     outputs:
-      image_names: ${{ steps.get-image-names.outputs.image_names }}
+      image_matrix: ${{ steps.get-image-names.outputs.image_matrix }}
     steps:
       - uses: actions/checkout@v3
 
@@ -23,20 +23,20 @@ jobs:
         id: get-image-names
         working-directory: ./example-go-project/build/dockerfile
         run: |
-          image_names='[ '
+          image_matrix='[ '
           for image_name in Dockerfile.*; do
-            image_names+="\"${image_name##*.}\", "
+            image_matrix+="\"${image_name##*.}\", "
           done
-          image_names="${image_names%??} ]"
-          echo $image_names
-          echo "image_names=$image_names" >> $GITHUB_OUTPUT
+          image_matrix="${image_matrix%??} ]"
+          echo $image_matrix
+          echo "image_matrix=$image_matrix" >> $GITHUB_OUTPUT
 
   build-and-push-images:
     runs-on: ubuntu-latest
-    needs: get-image-names
+    needs: set-up-image-matrix
     strategy:
       matrix:
-        image: ${{ fromJson(needs.get-image-names.outputs.image_names) }}
+        image: ${{ fromJson(needs.set-up-image-matrix.outputs.image_matrix) }}
     steps:
       - uses: actions/checkout@v3
 
