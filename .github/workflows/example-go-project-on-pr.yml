@@ -19,7 +19,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - id: get-image-names
+      - name: get image names
+        id: get-image-names
         working-directory: ./example-go-project/build/dockerfile
         run: |
           image_names='['
