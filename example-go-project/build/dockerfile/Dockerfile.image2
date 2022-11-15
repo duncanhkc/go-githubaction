@@ -5,7 +5,7 @@ COPY . /src
 RUN apk update && apk add --no-cache git openssh g++
 
 WORKDIR /src/bin
-RUN go build ../cmd/thrid-app
+RUN go build ../cmd/third-app
 
 FROM alpine
 WORKDIR /app
