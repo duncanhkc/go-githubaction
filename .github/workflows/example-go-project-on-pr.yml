@@ -25,7 +25,7 @@ jobs:
         run: |
           image_names='[ '
           for image_name in Dockerfile.*; do
-            image_names+="${image_name##*.}, "
+            image_names+="\"${image_name##*.}\", "
           done
           image_names="${image_names%??} ]"
           echo $image_names
