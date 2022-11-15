@@ -1,0 +1,12 @@
+FROM golang:alpine AS build-env
+
+COPY . /src
+
+RUN apk update && apk add --no-cache git openssh g++
+
+WORKDIR /src/bin
+RUN go build ../cmd/thrid-app
+
+FROM alpine
+WORKDIR /app
+COPY --from=build-env /src/bin/* /app/
