@@ -23,13 +23,10 @@ jobs:
         working-directory: ./example-go-project/build/dockerfile
         run: |
           image_names='['
-
           for image_name in Dockerfile.*; do
             image_names+=${image_name##*.},
           done
-
           image_names="${image_names%?}]"
-
           echo $image_names
           echo "image_names=$image_names" >> $GITHUB_OUTPUT
 
